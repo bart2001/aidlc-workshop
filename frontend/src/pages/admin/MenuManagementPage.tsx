@@ -198,7 +198,7 @@ const MenuManagementPage: React.FC = () => {
         )}
         <div className="menu-list">
           {filteredMenus.length === 0 && <p>등록된 메뉴가 없습니다.</p>}
-          {filteredMenus
+          {[...filteredMenus]
             .sort((a, b) => a.displayOrder - b.displayOrder)
             .map((menu, idx) => (
               <div key={menu.id} className="menu-list-item">

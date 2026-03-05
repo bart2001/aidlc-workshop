@@ -54,12 +54,17 @@ const DashboardPage: React.FC = () => {
     return () => disconnectSSE();
   }, [storeId, connectSSE, disconnectSSE]);
 
-  // 신규 주문 하이라이트
+  // 신규 주문 하이라이트 (useRef로 이전 주문 ID 추적)
+  const prevOrderIdsRef = React.useRef<Set<number>>(new Set());
+
   useEffect(() => {
-    const prevOrderIds = new Set(orders.map((o) => o.id));
+    prevOrderIdsRef.current = new Set(orders.map((o) => o.id));
+  }, [orders]);
+
+  useEffect(() => {
     const unsubscribe = useOrderStore.subscribe((state) => {
       const newIds = state.orders
-        .filter((o) => !prevOrderIds.has(o.id))
+        .filter((o) => !prevOrderIdsRef.current.has(o.id))
         .map((o) => o.tableId);
       if (newIds.length > 0) {
         setNewOrderTableIds((prev) => new Set([...prev, ...newIds]));
@@ -73,7 +78,7 @@ const DashboardPage: React.FC = () => {
       }
     });
     return unsubscribe;
-  }, [orders]);
+  }, []);
 
   const getOrdersForTable = (tableId: number): Order[] =>
     orders.filter((o) => o.tableId === tableId);
