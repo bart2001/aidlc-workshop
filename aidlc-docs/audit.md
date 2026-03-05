@@ -165,3 +165,39 @@ AI-DLC 워크플로우를 시작해봅시다."
 - `aidlc-docs/inception/application-design/component-dependency.md` - 의존성 매트릭스, 통신 패턴, 데이터 흐름
 
 ---
+
+## Application Design - Approval
+**Timestamp**: 2026-03-05T14:10:00+09:00
+**User Input**: "진행하자"
+**AI Response**: Application Design 승인 완료, Units Generation 단계 시작
+**Context**: INCEPTION - Application Design 승인, Units Generation 시작
+
+---
+
+## Units Generation - Answers Review & Generation Start
+**Timestamp**: 2026-03-05T14:18:00+09:00
+**User Input**: "답변했어. 검토해줘." → "진행해줘."
+**AI Response**: 답변 확인 (Q1:A 모놀리스, Q2:B 동시진행), 모순 없음. 산출물 생성 시작.
+**Context**: INCEPTION - Units Generation Step 6-13
+
+---
+
+## Units Generation - Artifacts Generation Complete
+**Timestamp**: 2026-03-05T14:22:00+09:00
+**AI Response**: Units Generation 산출물 3개 생성 완료
+**Context**: INCEPTION - Units Generation Step 12-16
+
+### Generated Artifacts
+- `aidlc-docs/inception/application-design/unit-of-work.md` - 3개 작업 단위 정의 (Backend, Frontend, Database)
+- `aidlc-docs/inception/application-design/unit-of-work-dependency.md` - 의존성 매트릭스, 개발 타임라인, 통합 전략
+- `aidlc-docs/inception/application-design/unit-of-work-story-map.md` - 12개 스토리 전체 매핑 완료
+
+---
+
+## Units Generation - Approval
+**Timestamp**: 2026-03-05T14:25:00+09:00
+**User Input**: "construction 진행할께. 지금 아래와 같이 역할이 되어있는데 작업을 어떻게 나눌 수 있을까? Product Owner (PO)... 개발자 (Developer)... DevOps... QA / 기획자..."
+**AI Response**: 역할별 CONSTRUCTION 단계 매핑 제공, Units Generation 승인 처리, CONSTRUCTION PHASE 시작
+**Context**: INCEPTION 완료, CONSTRUCTION PHASE 시작
+
+---

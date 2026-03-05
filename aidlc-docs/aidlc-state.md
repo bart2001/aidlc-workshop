@@ -27,11 +27,11 @@
 - [x] Requirements Analysis (COMPLETED - 2026-03-05T13:40:00+09:00)
 - [x] User Stories (COMPLETED - 2026-03-05T13:52:00+09:00)
 - [x] Workflow Planning (COMPLETED - 2026-03-05T13:55:00+09:00)
-- [ ] Application Design (IN PROGRESS)
-- [ ] Units Generation (EXECUTE)
+- [x] Application Design (COMPLETED - 2026-03-05T14:10:00+09:00)
+- [x] Units Generation (COMPLETED - 2026-03-05T14:25:00+09:00)
 
 ### CONSTRUCTION PHASE
-- [ ] Functional Design (EXECUTE, per-unit)
+- [ ] Functional Design - Unit 3 Database (IN PROGRESS)
 - [ ] NFR Requirements (EXECUTE, per-unit)
 - [ ] NFR Design (EXECUTE, per-unit)
 - [ ] Infrastructure Design (EXECUTE, per-unit)
