@@ -1,6 +1,13 @@
-import React from 'react';
-
-interface ConfirmDialogProps {
+/** 확인 팝업 다이얼로그 */
+export default function ConfirmDialog({
+  open,
+  title,
+  message,
+  confirmLabel = '확인',
+  cancelLabel = '취소',
+  onConfirm,
+  onCancel,
+}: {
   open: boolean;
   title: string;
   message: string;
@@ -8,25 +15,72 @@ interface ConfirmDialogProps {
   cancelLabel?: string;
   onConfirm: () => void;
   onCancel: () => void;
-}
-
-const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
-  open, title, message, confirmLabel = '확인', cancelLabel = '취소', onConfirm, onCancel,
-}) => {
+}) {
   if (!open) return null;
 
   return (
-    <div className="confirm-dialog-overlay" role="dialog" aria-modal="true" aria-labelledby="confirm-title">
-      <div className="confirm-dialog">
-        <h3 id="confirm-title">{title}</h3>
-        <p>{message}</p>
-        <div className="confirm-dialog-actions">
-          <button type="button" className="btn btn-secondary" onClick={onCancel}>{cancelLabel}</button>
-          <button type="button" className="btn btn-danger" onClick={onConfirm}>{confirmLabel}</button>
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="confirm-title"
+      style={{
+        position: 'fixed',
+        inset: 0,
+        backgroundColor: 'rgba(0,0,0,0.5)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 1000,
+      }}
+    >
+      <div
+        style={{
+          backgroundColor: '#fff',
+          borderRadius: '12px',
+          padding: '24px',
+          maxWidth: '360px',
+          width: '90%',
+          boxShadow: '0 4px 24px rgba(0,0,0,0.15)',
+        }}
+      >
+        <h2 id="confirm-title" style={{ margin: '0 0 8px', fontSize: '18px' }}>
+          {title}
+        </h2>
+        <p style={{ margin: '0 0 20px', color: '#6b7280' }}>{message}</p>
+        <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
+          <button
+            onClick={onCancel}
+            style={{
+              padding: '10px 20px',
+              border: '1px solid #d1d5db',
+              borderRadius: '6px',
+              backgroundColor: '#fff',
+              cursor: 'pointer',
+              minWidth: '44px',
+              minHeight: '44px',
+            }}
+            aria-label={cancelLabel}
+          >
+            {cancelLabel}
+          </button>
+          <button
+            onClick={onConfirm}
+            style={{
+              padding: '10px 20px',
+              border: 'none',
+              borderRadius: '6px',
+              backgroundColor: '#2563eb',
+              color: '#fff',
+              cursor: 'pointer',
+              minWidth: '44px',
+              minHeight: '44px',
+            }}
+            aria-label={confirmLabel}
+          >
+            {confirmLabel}
+          </button>
         </div>
       </div>
     </div>
   );
-};
-
-export default ConfirmDialog;
+}

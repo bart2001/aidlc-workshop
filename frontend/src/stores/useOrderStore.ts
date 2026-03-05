@@ -1,15 +1,13 @@
 import { create } from 'zustand';
-import type { Order, OrderEvent } from '../types';
+import type { Order } from '../types';
 
 interface OrderState {
   orders: Order[];
   eventSource: EventSource | null;
   setOrders: (orders: Order[]) => void;
-  addOrder: (order: Order) => void;
   updateOrder: (order: Order) => void;
   removeOrder: (orderId: number) => void;
-  clearOrdersByTable: (tableId: number) => void;
-  connectSSE: (storeId: number) => void;
+  connectSSE: (url: string) => void;
   disconnectSSE: () => void;
 }
 
@@ -19,62 +17,53 @@ export const useOrderStore = create<OrderState>((set, get) => ({
 
   setOrders: (orders) => set({ orders }),
 
-  addOrder: (order) => set((state) => ({ orders: [...state.orders, order] })),
+  updateOrder: (order) => {
+    const existing = get().orders.find((o) => o.id === order.id);
+    if (existing) {
+      set({ orders: get().orders.map((o) => (o.id === order.id ? order : o)) });
+    } else {
+      set({ orders: [order, ...get().orders] });
+    }
+  },
 
-  updateOrder: (order) =>
-    set((state) => ({
-      orders: state.orders.map((o) => (o.id === order.id ? order : o)),
-    })),
+  removeOrder: (orderId) => {
+    set({ orders: get().orders.filter((o) => o.id !== orderId) });
+  },
 
-  removeOrder: (orderId) =>
-    set((state) => ({
-      orders: state.orders.filter((o) => o.id !== orderId),
-    })),
+  connectSSE: (url) => {
+    get().disconnectSSE();
+    const token = localStorage.getItem('accessToken');
+    const eventSource = new EventSource(`${url}${url.includes('?') ? '&' : '?'}token=${token}`);
 
-  clearOrdersByTable: (tableId) =>
-    set((state) => ({
-      orders: state.orders.filter((o) => o.tableId !== tableId),
-    })),
+    eventSource.addEventListener('ORDER_CREATED', (e) => {
+      const order = JSON.parse(e.data) as Order;
+      get().updateOrder(order);
+    });
 
-  connectSSE: (storeId) => {
-    const existing = get().eventSource;
-    if (existing) existing.close();
+    eventSource.addEventListener('ORDER_STATUS_CHANGED', (e) => {
+      const order = JSON.parse(e.data) as Order;
+      get().updateOrder(order);
+    });
 
-    const token = localStorage.getItem('token');
-    const baseURL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
-    const url = `${baseURL}/api/stores/${storeId}/orders/stream?token=${token}`;
-    const es = new EventSource(url);
+    eventSource.addEventListener('ORDER_DELETED', (e) => {
+      const { orderId } = JSON.parse(e.data) as { orderId: number };
+      get().removeOrder(orderId);
+    });
 
-    es.onmessage = (event) => {
-      const data: OrderEvent = JSON.parse(event.data);
-      switch (data.type) {
-        case 'NEW_ORDER':
-          if (data.order) get().addOrder(data.order);
-          break;
-        case 'STATUS_CHANGED':
-          if (data.order) get().updateOrder(data.order);
-          break;
-        case 'ORDER_DELETED':
-          if (data.orderId) get().removeOrder(data.orderId);
-          break;
-        case 'SESSION_COMPLETED':
-          if (data.tableId) get().clearOrdersByTable(data.tableId);
-          break;
-      }
+    eventSource.onerror = () => {
+      eventSource.close();
+      // 3초 후 재연결
+      setTimeout(() => get().connectSSE(url), 3000);
     };
 
-    es.onerror = () => {
-      es.close();
-      // 자동 재연결 (3초 후)
-      setTimeout(() => get().connectSSE(storeId), 3000);
-    };
-
-    set({ eventSource: es });
+    set({ eventSource });
   },
 
   disconnectSSE: () => {
     const es = get().eventSource;
-    if (es) es.close();
-    set({ eventSource: null });
+    if (es) {
+      es.close();
+      set({ eventSource: null });
+    }
   },
 }));

@@ -1,47 +1,36 @@
 import { create } from 'zustand';
-import type { UserRole } from '../types';
 
 interface AuthState {
-  token: string | null;
+  accessToken: string | null;
   storeId: number | null;
-  username: string | null;
-  role: UserRole | null;
-  isAuthenticated: boolean;
-  login: (token: string, storeId: number, username: string, role: UserRole) => void;
+  tableId: number | null;
+  role: 'TABLE' | 'ADMIN' | null;
+  login: (token: string, storeId: number, role: 'TABLE' | 'ADMIN', tableId?: number) => void;
   logout: () => void;
-  initialize: () => void;
+  isAuthenticated: () => boolean;
 }
 
-export const useAuthStore = create<AuthState>((set) => ({
-  token: null,
-  storeId: null,
-  username: null,
-  role: null,
-  isAuthenticated: false,
+export const useAuthStore = create<AuthState>((set, get) => ({
+  accessToken: localStorage.getItem('accessToken'),
+  storeId: localStorage.getItem('storeId') ? Number(localStorage.getItem('storeId')) : null,
+  tableId: localStorage.getItem('tableId') ? Number(localStorage.getItem('tableId')) : null,
+  role: localStorage.getItem('role') as 'TABLE' | 'ADMIN' | null,
 
-  login: (token, storeId, username, role) => {
-    localStorage.setItem('token', token);
+  login: (token, storeId, role, tableId) => {
+    localStorage.setItem('accessToken', token);
     localStorage.setItem('storeId', String(storeId));
-    localStorage.setItem('username', username);
     localStorage.setItem('role', role);
-    set({ token, storeId, username, role, isAuthenticated: true });
+    if (tableId) localStorage.setItem('tableId', String(tableId));
+    set({ accessToken: token, storeId, role, tableId: tableId ?? null });
   },
 
   logout: () => {
-    localStorage.removeItem('token');
+    localStorage.removeItem('accessToken');
     localStorage.removeItem('storeId');
-    localStorage.removeItem('username');
+    localStorage.removeItem('tableId');
     localStorage.removeItem('role');
-    set({ token: null, storeId: null, username: null, role: null, isAuthenticated: false });
+    set({ accessToken: null, storeId: null, tableId: null, role: null });
   },
 
-  initialize: () => {
-    const token = localStorage.getItem('token');
-    const storeId = localStorage.getItem('storeId');
-    const username = localStorage.getItem('username');
-    const role = localStorage.getItem('role') as UserRole | null;
-    if (token && storeId && role) {
-      set({ token, storeId: Number(storeId), username, role, isAuthenticated: true });
-    }
-  },
+  isAuthenticated: () => !!get().accessToken,
 }));

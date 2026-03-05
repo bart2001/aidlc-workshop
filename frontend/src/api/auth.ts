@@ -1,8 +1,11 @@
 import apiClient from './client';
-import type { AdminLoginRequest, AdminLoginResponse, ApiResponse } from '../types';
+import type { ApiResponse, LoginResponse, TableLoginRequest, AdminLoginRequest } from '../types';
 
-export const adminLogin = (data: AdminLoginRequest) =>
-  apiClient.post<ApiResponse<AdminLoginResponse>>('/api/auth/admin/login', data);
+export const loginTable = (data: TableLoginRequest) =>
+  apiClient.post<ApiResponse<LoginResponse>>('/api/auth/table/login', data);
 
-export const refreshToken = () =>
-  apiClient.post<ApiResponse<{ token: string }>>('/api/auth/token/refresh');
+export const loginAdmin = (data: AdminLoginRequest) =>
+  apiClient.post<ApiResponse<LoginResponse>>('/api/auth/admin/login', data);
+
+export const refreshToken = (token: string) =>
+  apiClient.post<ApiResponse<LoginResponse>>('/api/auth/token/refresh', { refreshToken: token });

@@ -1,22 +1,29 @@
-import React from 'react';
 import type { OrderStatus } from '../../types';
 
-const STATUS_LABELS: Record<OrderStatus, string> = {
-  PENDING: '대기중',
-  PREPARING: '준비중',
-  COMPLETED: '완료',
+const statusConfig: Record<OrderStatus, { label: string; bg: string; color: string }> = {
+  PENDING: { label: '대기중', bg: '#fef3c7', color: '#92400e' },
+  PREPARING: { label: '준비중', bg: '#dbeafe', color: '#1e40af' },
+  COMPLETED: { label: '완료', bg: '#d1fae5', color: '#065f46' },
 };
 
-const STATUS_CLASSES: Record<OrderStatus, string> = {
-  PENDING: 'badge-pending',
-  PREPARING: 'badge-preparing',
-  COMPLETED: 'badge-completed',
-};
+/** 주문 상태 뱃지 (대기중/준비중/완료) */
+export default function OrderStatusBadge({ status }: { status: OrderStatus }) {
+  const config = statusConfig[status] || statusConfig.PENDING;
 
-const OrderStatusBadge: React.FC<{ status: OrderStatus }> = ({ status }) => (
-  <span className={`order-status-badge ${STATUS_CLASSES[status]}`}>
-    {STATUS_LABELS[status]}
-  </span>
-);
-
-export default OrderStatusBadge;
+  return (
+    <span
+      style={{
+        display: 'inline-block',
+        padding: '4px 10px',
+        borderRadius: '12px',
+        fontSize: '12px',
+        fontWeight: 600,
+        backgroundColor: config.bg,
+        color: config.color,
+      }}
+      aria-label={`주문 상태: ${config.label}`}
+    >
+      {config.label}
+    </span>
+  );
+}
