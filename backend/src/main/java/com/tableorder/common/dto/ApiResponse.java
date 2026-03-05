@@ -8,19 +8,27 @@ import lombok.Getter;
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ApiResponse<T> {
+
     private boolean success;
     private T data;
-    private String message;
+    private ErrorDetail error;
 
     public static <T> ApiResponse<T> ok(T data) {
         return new ApiResponse<>(true, data, null);
     }
 
-    public static ApiResponse<Void> ok() {
+    public static <T> ApiResponse<T> ok() {
         return new ApiResponse<>(true, null, null);
     }
 
-    public static ApiResponse<Void> error(String message) {
-        return new ApiResponse<>(false, null, message);
+    public static <T> ApiResponse<T> error(String code, String message) {
+        return new ApiResponse<>(false, null, new ErrorDetail(code, message));
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class ErrorDetail {
+        private String code;
+        private String message;
     }
 }

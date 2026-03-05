@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -11,7 +12,9 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Store {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false, length = 100)
@@ -24,8 +27,13 @@ public class Store {
     private LocalDateTime updatedAt;
 
     @PrePersist
-    protected void onCreate() { createdAt = updatedAt = LocalDateTime.now(); }
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
 
     @PreUpdate
-    protected void onUpdate() { updatedAt = LocalDateTime.now(); }
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
 }
