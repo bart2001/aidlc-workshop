@@ -31,7 +31,7 @@
 - [x] Units Generation (COMPLETED - 2026-03-05T14:25:00+09:00)
 
 ### CONSTRUCTION PHASE
-- [ ] Functional Design - Unit 1 Database (PENDING)
+- [x] Functional Design - Unit 1 Database (COMPLETED - 2026-03-05T15:10:00+09:00, PO 승인)
 - [ ] Code Generation - Unit 1 Database (PENDING)
 - [ ] Functional Design - Unit 2 Backend (PENDING)
 - [ ] NFR Requirements - Unit 2 Backend (PENDING)
