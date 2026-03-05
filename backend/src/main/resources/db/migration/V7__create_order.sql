@@ -1,5 +1,5 @@
--- Order (주문)
-CREATE TABLE "order" (
+-- Order (주문) - 테이블명 orders 사용 (order는 PostgreSQL 예약어)
+CREATE TABLE orders (
     id BIGSERIAL PRIMARY KEY,
     store_id BIGINT NOT NULL REFERENCES store(id) ON DELETE RESTRICT,
     table_id BIGINT NOT NULL REFERENCES store_table(id) ON DELETE RESTRICT,
@@ -12,6 +12,6 @@ CREATE TABLE "order" (
     CONSTRAINT chk_order_status CHECK (status IN ('PENDING', 'PREPARING', 'COMPLETED'))
 );
 
-CREATE INDEX idx_order_store_session ON "order" (store_id, session_id, created_at);
-CREATE INDEX idx_order_store_status ON "order" (store_id, status);
-CREATE UNIQUE INDEX idx_order_store_number_date ON "order" (store_id, order_number, (DATE(created_at)));
+CREATE INDEX idx_order_store_session ON orders (store_id, session_id, created_at);
+CREATE INDEX idx_order_store_status ON orders (store_id, status);
+CREATE UNIQUE INDEX idx_order_store_number_date ON orders (store_id, order_number, (DATE(created_at)));

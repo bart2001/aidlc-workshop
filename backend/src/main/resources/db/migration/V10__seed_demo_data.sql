@@ -1,17 +1,19 @@
 -- 데모 매장
 INSERT INTO store (name) VALUES ('데모 매장');
 
--- 관리자 계정 (비밀번호: admin1234, bcrypt 해싱)
+-- 관리자 계정 (비밀번호: admin1234)
+-- bcrypt 해시는 애플리케이션 기동 시 검증 가능. 아래는 cost=10 기준 예시.
+-- 실제 운영에서는 애플리케이션에서 생성한 해시를 사용하세요.
 INSERT INTO admin (store_id, username, password_hash)
 VALUES (1, 'admin', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy');
 
--- 테이블 5개 (비밀번호: 각각 table1 ~ table5, bcrypt 해싱)
+-- 테이블 5개 (비밀번호: 모두 "1234" 로 통일 - 개발용)
 INSERT INTO store_table (store_id, table_number, password_hash) VALUES
-(1, 1, '$2a$10$EqKcp1WFKAr1GYMwIOg8X.PBaqNMECMjMIjGTGxSPmHMOhZS0TBMC'),
-(1, 2, '$2a$10$EqKcp1WFKAr1GYMwIOg8X.PBaqNMECMjMIjGTGxSPmHMOhZS0TBMC'),
-(1, 3, '$2a$10$EqKcp1WFKAr1GYMwIOg8X.PBaqNMECMjMIjGTGxSPmHMOhZS0TBMC'),
-(1, 4, '$2a$10$EqKcp1WFKAr1GYMwIOg8X.PBaqNMECMjMIjGTGxSPmHMOhZS0TBMC'),
-(1, 5, '$2a$10$EqKcp1WFKAr1GYMwIOg8X.PBaqNMECMjMIjGTGxSPmHMOhZS0TBMC');
+(1, 1, '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy'),
+(1, 2, '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy'),
+(1, 3, '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy'),
+(1, 4, '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy'),
+(1, 5, '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy');
 
 -- 카테고리
 INSERT INTO category (store_id, name, display_order) VALUES

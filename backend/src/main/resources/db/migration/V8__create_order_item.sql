@@ -1,7 +1,7 @@
 -- OrderItem (주문 항목)
 CREATE TABLE order_item (
     id BIGSERIAL PRIMARY KEY,
-    order_id BIGINT NOT NULL REFERENCES "order"(id) ON DELETE CASCADE,
+    order_id BIGINT NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
     menu_item_id BIGINT REFERENCES menu_item(id) ON DELETE SET NULL,
     menu_name VARCHAR(100) NOT NULL,
     quantity INT NOT NULL CHECK (quantity > 0),

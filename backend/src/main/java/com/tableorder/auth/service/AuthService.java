@@ -39,7 +39,7 @@ public class AuthService {
         return new TableLoginResponse(token, request.getStoreId(), table.getId(), table.getTableNumber());
     }
 
-    @Transactional
+    @Transactional(noRollbackFor = BusinessException.class)
     public AdminLoginResponse loginAdmin(AdminLoginRequest request) {
         Admin admin = adminRepository
                 .findByStoreIdAndUsername(request.getStoreId(), request.getUsername())
